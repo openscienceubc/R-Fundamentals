@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>Matrix Data</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/flatly.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+<link rel="stylesheet" href="styles.css" type="text/css" />
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 60px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h2 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h3 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h4 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h5 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h6 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #ffffff;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+.tocify-subheader {
+  display: inline;
+}
+.tocify-subheader .tocify-item {
+  font-size: 0.95em;
+}
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">R Fundamentals</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="Part_1.html">Part 1: Installation</a>
+</li>
+<li>
+  <a href="Part_2.html">Part 2: Introduction</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Part 3: Data Types
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="Part_3.1.html">3.1 Numbers and Logical Values</a>
+    </li>
+    <li>
+      <a href="Part_3.2.html">3.2 Characters and Categories</a>
+    </li>
+    <li>
+      <a href="Part_3.3.html">3.3 Math and Random Samples</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Part 4: Matrices and Dataframes
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="Part_4.1.html">4.1 Matrix Data</a>
+    </li>
+    <li>
+      <a href="Part_4.2.html">4.2 Dataframes</a>
+    </li>
+    <li>
+      <a href="Part_4.3.html">4.3 Importing Data</a>
+    </li>
+  </ul>
+</li>
+<li>
+  <a href="Part_5_Exercises.html">Exercises</a>
+</li>
+<li>
+  <a href="Resources.html">Resources</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">Matrix Data</h1>
+
+</div>
+
+
+<div id="matrix-data" class="section level2">
+<h2>Matrix Data</h2>
+<p>Vectors are single dimension objects.</p>
+<p>Arrays are multidimensional. A matrix is a special case of an array that contains only 2 dimensions; they have length and width but no depth. Think of this like a an excel document that has only one sheet.</p>
+<ul>
+<li>Vectors have one dimension</li>
+<li>Arrays have two or more directions</li>
+<li>Matrices are a type of array that has only 2 dimensions</li>
+</ul>
+<p>Right, using our script, let’s generate some data to play with.</p>
+<div class="note">
+<p><strong>Note</strong></p>
+<p>Generating all of our own data may seem a little tedious, but it’s both a great way to troubleshoot, get familiar with a new concept, and once you move into online forums for support, this support will often use ad hoc generated data to provide a solution, so it’s good to be familiar with the processes invovled in data generation.</p>
+</div>
+<p>Let’s say we’re collecting data on people, including their height and weight. To simulate a random sample let’s create the following vectors:</p>
+<pre class="r"><code>Height &lt;- sample(120:190, 20, replace = TRUE) # A random sample of 20 data points from the range 120 to 190 where values can be replaced
+
+Weight &lt;- sample(50:90, 20, replace = TRUE) # A random sample of 20 data points from the range 50 to 90 where values can be replaced
+
+Height</code></pre>
+<pre><code>##  [1] 147 162 166 159 124 127 151 161 180 174 127 153 122 158 130 142 162 165 171 135</code></pre>
+<pre class="r"><code>Weight</code></pre>
+<pre><code>##  [1] 69 74 61 73 55 78 84 76 80 84 77 68 86 61 52 71 90 84 68 60</code></pre>
+</div>
+<div id="combining-data" class="section level2">
+<h2>Combining Data</h2>
+<p>We now have two uni-dimensional objects; two vectors.</p>
+<p>Let’s convert these into a two dimensional array, or matrix by combining them together into a single object that we will call <code>myMatrix</code>, because we’re creative that way.</p>
+<div id="cbind" class="section level3">
+<h3>cbind()</h3>
+<p>To do this, we will use the function <code>cbind</code>, as in column bind; a handy function that allows us to append one vector of data onto another, which will give us a matrix with 2 variables each with 20 data points.</p>
+<p>We will give <code>cbind()</code> two arguments, the variable names of our two vectors.</p>
+<pre class="r"><code>myMatrix &lt;- cbind(Height, Weight)
+
+head(myMatrix)</code></pre>
+<pre><code>##      Height Weight
+## [1,]    147     69
+## [2,]    162     74
+## [3,]    166     61
+## [4,]    159     73
+## [5,]    124     55
+## [6,]    127     78</code></pre>
+<p>Great, now we have a gird of data.</p>
+<p>Just to double check that we’ve done what we intended, let’s ask R about the class of our new object:</p>
+<pre class="r"><code>class(myMatrix)</code></pre>
+<pre><code>## [1] &quot;matrix&quot; &quot;array&quot;</code></pre>
+<div class="note">
+<p><strong>Note</strong></p>
+<p>The length of each variable, that is each vector, in a matrix must be the same length. The above example works well because both <code>Height</code> and <code>Weight</code> have the same length.</p>
+<p>Also, matrices, like vectors, are atomic, that is, an array can only contain one data type - numeric, character, logical etc. We cannot have a matrix where one vector is numeric data and the second is character data. We have other options that we’ll look at for this in a moment.</p>
+</div>
+<p>Let’s now create a matrix, with three columns to see a few more things that we can do with matrices and arrays.</p>
+<p>And let’s now say that we are also interested in collecting age in addition to height and weight. So, as before, let’s create a sample of 20 ages from an undergraduate population, so, between 20 and 25:</p>
+<pre class="r"><code>Age &lt;- sample(20:25, 20, replace = TRUE) # A random sample of 20 data points from the range 20 to 25 where values can be replaced
+
+Age</code></pre>
+<pre><code>##  [1] 24 24 20 23 25 24 23 23 22 24 25 25 22 22 20 25 23 21 21 22</code></pre>
+<p>We’re going to employ the function <code>cbind()</code> again to join this new variable and associated data with our existing matrix.</p>
+<pre class="r"><code>myMatrix &lt;- cbind(myMatrix, Age) 
+
+head(myMatrix)</code></pre>
+<pre><code>##      Height Weight Age
+## [1,]    147     69  24
+## [2,]    162     74  24
+## [3,]    166     61  20
+## [4,]    159     73  23
+## [5,]    124     55  25
+## [6,]    127     78  24</code></pre>
+<p>We now have three columns, one for <code>Height</code>, <code>Weight</code> and <code>Age</code> respectively. And we’re finally starting to see something like a proper data set!</p>
+</div>
+<div id="rbind" class="section level3">
+<h3>rbind()</h3>
+<p>In the same way that we can add columns to our data, we can also add rows to our data. We are not limited to adding a single column or a single row at a time.</p>
+<p>In the following steps, we will use <code>rbind()</code>, as in row bind, to merge two datasets together.</p>
+<p>Say we get two datasets of height, weight, and age data, each collected by two different researchers. We already have one set <code>myMatrix</code>. Let’s create a second dataset, <code>yourMatrix</code> to work through this.</p>
+<p>As before, we’ll take two samples and <code>cbind</code> them together.</p>
+<pre class="r"><code>Height2 &lt;- sample(120:190, 20, replace = TRUE)
+
+Weight2 &lt;- sample(50:90, 20, replace = TRUE)
+
+Age2 &lt;- sample(20:25, 20, replace = TRUE)
+
+Height2</code></pre>
+<pre><code>##  [1] 136 143 164 138 137 132 134 176 187 178 135 169 181 147 170 186 134 165 169 169</code></pre>
+<pre class="r"><code>Weight2</code></pre>
+<pre><code>##  [1] 73 70 69 66 86 79 78 63 73 74 84 58 71 82 89 66 78 74 55 89</code></pre>
+<pre class="r"><code>Age2</code></pre>
+<pre><code>##  [1] 25 23 22 20 25 23 22 24 24 23 20 20 24 24 21 22 23 25 21 22</code></pre>
+<pre class="r"><code>yourMatrix &lt;- cbind(Height2, Weight2, Age2)
+
+head(yourMatrix)</code></pre>
+<pre><code>##      Height2 Weight2 Age2
+## [1,]     136      73   25
+## [2,]     143      70   23
+## [3,]     164      69   22
+## [4,]     138      66   20
+## [5,]     137      86   25
+## [6,]     132      79   23</code></pre>
+<p>Now, let’s put them together into a new matrix called <code>completeMatric</code>.</p>
+<pre class="r"><code>completeMatrix &lt;- rbind(myMatrix, yourMatrix)</code></pre>
+<p>Let’s use <code>View()</code> to see if we were successful</p>
+<pre class="r"><code>View(completeMatrix)</code></pre>
+</div>
+</div>
+<div id="atomic-data" class="section level2">
+<h2>Atomic data</h2>
+<p>Remember we said that matrices, like vectors, are atomic. Let’s see what the implications of this are.</p>
+<p>Imagine we were also collecting eye colour as a variable. What we’ll do then is create a vector of 20 random samples of eye colour and add it as a fourth column to our matrix, named this time, myMatrixEyeColour.</p>
+<p>Remember, we already created a vector of eye colours from which we can generate a random sample.</p>
+<pre class="r"><code>eyeColour</code></pre>
+<pre><code>## [1] &quot;blue&quot;  &quot;green&quot; &quot;brown&quot; &quot;hazel&quot; &quot;amber&quot; &quot;grey&quot;</code></pre>
+<p>Let’s use this to generate a sample of 40 data points that we can add to our <code>completeMatrix</code></p>
+<pre class="r"><code>EyeColourSample &lt;- sample(eyeColour, 40, replace = TRUE) # A random sample of 40 data points from the character options in the variable eyeColour where values can be replaced
+
+EyeColourSample</code></pre>
+<pre><code>##  [1] &quot;brown&quot; &quot;amber&quot; &quot;green&quot; &quot;brown&quot; &quot;grey&quot;  &quot;green&quot; &quot;hazel&quot; &quot;green&quot; &quot;brown&quot; &quot;blue&quot;  &quot;grey&quot;  &quot;hazel&quot; &quot;amber&quot;
+## [14] &quot;grey&quot;  &quot;brown&quot; &quot;brown&quot; &quot;amber&quot; &quot;blue&quot;  &quot;blue&quot;  &quot;green&quot; &quot;brown&quot; &quot;amber&quot; &quot;amber&quot; &quot;hazel&quot; &quot;hazel&quot; &quot;hazel&quot;
+## [27] &quot;blue&quot;  &quot;amber&quot; &quot;grey&quot;  &quot;grey&quot;  &quot;brown&quot; &quot;brown&quot; &quot;green&quot; &quot;green&quot; &quot;grey&quot;  &quot;grey&quot;  &quot;blue&quot;  &quot;hazel&quot; &quot;grey&quot; 
+## [40] &quot;green&quot;</code></pre>
+<p>Now, we’ll add this to <code>completeMatrix</code> with <code>cbind()</code></p>
+<pre class="r"><code>completeMatrixEyeColour &lt;- cbind(completeMatrix, EyeColourSample)
+
+head(completeMatrixEyeColour)</code></pre>
+<pre><code>##      Height Weight Age  EyeColourSample
+## [1,] &quot;147&quot;  &quot;69&quot;   &quot;24&quot; &quot;brown&quot;        
+## [2,] &quot;162&quot;  &quot;74&quot;   &quot;24&quot; &quot;amber&quot;        
+## [3,] &quot;166&quot;  &quot;61&quot;   &quot;20&quot; &quot;green&quot;        
+## [4,] &quot;159&quot;  &quot;73&quot;   &quot;23&quot; &quot;brown&quot;        
+## [5,] &quot;124&quot;  &quot;55&quot;   &quot;25&quot; &quot;grey&quot;         
+## [6,] &quot;127&quot;  &quot;78&quot;   &quot;24&quot; &quot;green&quot;</code></pre>
+<p>What’s happened? R has adapted on the fly to allow you to do this.</p>
+<p>Inadvertently, however, it has converted all of your numerical data to character data! Remember we said that R is a little too easy going and let's you do things it probably shouldn’t? This is one case in point. You should always be careful and always inquire to see if what you intended to have happen actually happened.</p>
+</div>
+<div id="indexing" class="section level2">
+<h2>Indexing</h2>
+<p>Matrices, like vectors are indexed, but now they have two axes that are indexed, rows and columns.</p>
+<p>We can work with these just as we did with vectors, but we now need to specify if we’re interested in a row or a column of data - that is, a variable or an observation.</p>
+<p>We do this in the following way: <code>matrix[row, column]</code>.</p>
+<p>So, say we wanted to see only the <code>Height</code> data. We could can do this in one of two ways, with an index number or an index label:</p>
+<pre class="r"><code>completeMatrix[, 1]</code></pre>
+<pre><code>##  [1] 147 162 166 159 124 127 151 161 180 174 127 153 122 158 130 142 162 165 171 135 136 143 164 138 137 132 134
+## [28] 176 187 178 135 169 181 147 170 186 134 165 169 169</code></pre>
+<pre class="r"><code>completeMatrix[, &quot;Height&quot;]</code></pre>
+<pre><code>##  [1] 147 162 166 159 124 127 151 161 180 174 127 153 122 158 130 142 162 165 171 135 136 143 164 138 137 132 134
+## [28] 176 187 178 135 169 181 147 170 186 134 165 169 169</code></pre>
+<p>If we wanted to see <code>Height</code> and <code>Age</code> only, we can concatenate just as we did with our vector:</p>
+<pre class="r"><code>head(completeMatrix[, c(1,3)])</code></pre>
+<pre><code>##      Height Age
+## [1,]    147  24
+## [2,]    162  24
+## [3,]    166  20
+## [4,]    159  23
+## [5,]    124  25
+## [6,]    127  24</code></pre>
+<pre class="r"><code>head(completeMatrix[, c(&quot;Height&quot;, &quot;Age&quot;)])</code></pre>
+<pre><code>##      Height Age
+## [1,]    147  24
+## [2,]    162  24
+## [3,]    166  20
+## [4,]    159  23
+## [5,]    124  25
+## [6,]    127  24</code></pre>
+<p>To see a row:</p>
+<pre class="r"><code>completeMatrix[1, ]</code></pre>
+<pre><code>## Height Weight    Age 
+##    147     69     24</code></pre>
+<pre class="r"><code>completeMatrix[1:3, ]</code></pre>
+<pre><code>##      Height Weight Age
+## [1,]    147     69  24
+## [2,]    162     74  24
+## [3,]    166     61  20</code></pre>
+<div class="note">
+<p><strong>Note</strong></p>
+<p>By not indicating what row or column we’re interested in, R defaults to showing us the entire row or column.</p>
+</div>
+<p>To see an intersection:</p>
+<pre class="r"><code>completeMatrix[1,3]</code></pre>
+<pre><code>## Age 
+##  24</code></pre>
+<pre class="r"><code>completeMatrix[1, &quot;Age&quot;]</code></pre>
+<pre><code>## Age 
+##  24</code></pre>
+<pre class="r"><code>completeMatrix[1:3, c(&quot;Height&quot;, &quot;Age&quot;)]</code></pre>
+<pre><code>##      Height Age
+## [1,]    147  24
+## [2,]    162  24
+## [3,]    166  20</code></pre>
+</div>
+<div id="questions" class="section level2">
+<h2>Questions</h2>
+<p>Three questions that we can ask of multi-dimensional structures in R that can come in handy include.</p>
+<ul>
+<li><code>nrow()</code> which tells us the number of rows</li>
+<li><code>ncol()</code> which tells us the number of columns</li>
+<li><code>dim()</code> which tells us both pieces of information</li>
+</ul>
+<pre class="r"><code>nrow(completeMatrix)</code></pre>
+<pre><code>## [1] 40</code></pre>
+<pre class="r"><code>ncol(completeMatrix)</code></pre>
+<pre><code>## [1] 3</code></pre>
+<pre class="r"><code>dim(completeMatrix)</code></pre>
+<pre><code>## [1] 40  3</code></pre>
+</div>
+<div id="what-have-we-learned" class="section level2">
+<h2>What have we learned</h2>
+<ul>
+<li>We can store 2 dimensional data in a matrix</li>
+<li>A matrix is atomic, that is, it can only hold one data type</li>
+<li>We can combine vectors to make a matrix with <code>cbind()</code></li>
+<li>We can combine datasets together with <code>rbind()</code></li>
+<li>The vectors of an array need be of the same length</li>
+</ul>
+</div>
+<div id="exercise-4.1" class="section level2">
+<h2>Exercise 4.1</h2>
+<p>Let’s bring together a few of the things we’ve learned to organize some of our data. And in doing so, introduce a few more useful functions.</p>
+<p>Take a few minutes and try to:</p>
+<ul>
+<li>sort your <code>Height</code> vector data from lowest to highest value;</li>
+<li>list only the unique values in this same data;</li>
+<li>list a summary of your data as if it were categorical data;</li>
+<li>sort your summary from above from lowest to highest.</li>
+</ul>
+<p>Do the above using the following functions:</p>
+<ul>
+<li><code>sort()</code></li>
+<li><code>unique()</code></li>
+<li><code>as.factor</code></li>
+<li><code>summary</code></li>
+</ul>
+</div>
+
+<div id="footer">
+    <hr />
+    <p>Built and rendered curtousy of <a href="https://rmarkdown.rstudio.com/index.html" target ="blank">RMarkdown from RStudio</a></p>
+</div>
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = false;
+    options.smoothScroll = false;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

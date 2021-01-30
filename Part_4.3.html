@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>Importing Data</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/flatly.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+<link rel="stylesheet" href="styles.css" type="text/css" />
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 60px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h2 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h3 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h4 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h5 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h6 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #ffffff;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+.tocify-subheader {
+  display: inline;
+}
+.tocify-subheader .tocify-item {
+  font-size: 0.95em;
+}
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">R Fundamentals</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="Part_1.html">Part 1: Installation</a>
+</li>
+<li>
+  <a href="Part_2.html">Part 2: Introduction</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Part 3: Data Types
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="Part_3.1.html">3.1 Numbers and Logical Values</a>
+    </li>
+    <li>
+      <a href="Part_3.2.html">3.2 Characters and Categories</a>
+    </li>
+    <li>
+      <a href="Part_3.3.html">3.3 Math and Random Samples</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Part 4: Matrices and Dataframes
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="Part_4.1.html">4.1 Matrix Data</a>
+    </li>
+    <li>
+      <a href="Part_4.2.html">4.2 Dataframes</a>
+    </li>
+    <li>
+      <a href="Part_4.3.html">4.3 Importing Data</a>
+    </li>
+  </ul>
+</li>
+<li>
+  <a href="Part_5_Exercises.html">Exercises</a>
+</li>
+<li>
+  <a href="Resources.html">Resources</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">Importing Data</h1>
+
+</div>
+
+
+<div id="getting-the-data" class="section level2">
+<h2>Getting the Data</h2>
+<p>I have a sample csv file available for you <a href="./files/SwissData.csv">at this link</a>. Please download it and place it in your RScripts folder that we created earlier on your desktop.</p>
+</div>
+<div id="file-formats" class="section level2">
+<h2>File Formats</h2>
+<p>Data are stored in a wide variety of formats, and R can handle many of these. We’re going to work with a simple example today using the very common spread sheet format csv or comma separated value, in which column variables are separated by commas.</p>
+<div class="question">
+<p><strong>Comma Seperated Values</strong></p>
+<p>In general, keeping your data in a plain text format like csv has many advantages including longevity of access, transferability across systems, and perhaps most importantly, encouraging good data handling practices; programs like Excel allow us to indicate information about our data using colours, to merge cells etc, all of which limit the ability of a machine to read our data.</p>
+</div>
+</div>
+<div id="knowing-where-your-data-is" class="section level2">
+<h2>Knowing where your data is</h2>
+<p>Before we can import our data, we need to know what our working directory is, that is, what folder R thinks we’re currently in and what folder our data is in.</p>
+<p>We have two functions for this:</p>
+<ul>
+<li><code>getwd()</code> <em>get working directory</em>, which tells us where we are; and</li>
+<li><code>setwd()</code> <em>set working directory</em>, which tells R where we want to be.</li>
+</ul>
+<p><span class="important">This next bit is important</span></p>
+<p>We want to set our working directory to the same location as our script. To do this, we’ll use the following code:</p>
+<p><strong>Mac and Linux</strong></p>
+<pre>setwd("~/Desktop/RScripts")</pre>
+<p><strong>Windows</strong></p>
+<pre>setwd("~/../Desktop/RScripts")</pre>
+<div class="note">
+<p><strong>Note</strong></p>
+<p>Every system has a default home directory. We can access that directory with the <code>~</code>. On Mac OS and Linux, this is generally your user folder and on Windows your documents folder.</p>
+<p>The above will work for systems that have not had their default home directories changed.</p>
+</div>
+</div>
+<div id="importing-csv" class="section level2">
+<h2>Importing csv</h2>
+<p>We can read a csv with the function <code>read.table()</code>. <code>read.table()</code> has several iterations, such as <code>read.csv()</code> specifically for comma separated values and <code>read.csv2</code> that accounts for the use of commas in place of decimals in certain countries, but <code>read.table</code> will allow us to explore a bit more what’s happening on our import.</p>
+<div class="question">
+<p><strong>Swiss data set</strong></p>
+<p>R comes pre-loaded with several data sets that you can play around with. The Swiss data set is one example. This is a data set of standardized fertility measure and socio-economic indicators for each of 47 French-speaking provinces of Switzerland at about 1888. The csv generated for this workshop is derived from this dataset, with a few changes introduced.</p>
+<p>You can learn more about the data set with <code>?swiss</code></p>
+</div>
+<div id="inital-exploration" class="section level3">
+<h3>Inital Exploration</h3>
+<p>First, let’s open our file in a text editor, so you can see the comma separations.</p>
+<p>Let’s also open it in Excel, so you can see what it looks like in a spread sheet application (screen share only).</p>
+<p>We can see that we have a series of observations, represented as rows containing province names in Switzerland. Each observation has several variables, including things like education level and infant mortality rates.</p>
+<p>It’s important to note that we have column names (variable names) and row names (observations), but that these don’t represent data points.</p>
+<p>At this point, we should have a sense of what we need to import.</p>
+</div>
+<div id="import-options" class="section level3">
+<h3>Import Options</h3>
+<p>Let’s explore the options we can set when reading in this file considering the above. As before, we’ll start by just looking at the head to make sure everything looks as expected, before wasting time loading a large data set only to find we made a mistake.</p>
+<p><code>read.table()</code> provides us with several things that we can tell it on import, for instance how our data is separated - this could be comma, tab, or any value really - whether or not our data has row names, if there’s a header, and very importantly, if there are values that we want to replace with NA on import.</p>
+<p>You can of course get a full list of the options available with <code>?read.table</code>, but for the moment we’re going to forge ahead with the following:</p>
+<pre>head(read.table("SwissData.csv", sep = ",", row.names = 1, header = TRUE, na.strings = c("NULL", "", " ")))</pre>
+<pre><code>##              Fertility Agriculture Examination Education Catholic Infant.Mortality
+## Courtelary        80.2        17.0          15        12       NA             22.2
+## Delemont          83.1        45.1           6         9    84.84             22.2
+## Franches-Mnt      92.5        39.7           5         5    93.40             20.2
+## Moutier           85.8        36.5          12         7    33.77             20.3
+## Neuveville        76.9        43.5          17        15     5.16             20.6
+## Porrentruy        76.1        35.3           9         7    90.57             26.6</code></pre>
+<p>Let’s work through this.</p>
+<ol style="list-style-type: decimal">
+<li>First, we identify the file.</li>
+<li>Then <code>sep = ","</code> indicates the column separator used, in this case a comma.</li>
+<li><code>row.names = 1</code> indicates that we have row names and that these appear in the first column, so, import these, but don’t include them as data, just labels.</li>
+<li><code>header = TRUE</code> indicates that we have a header row naming our variables.</li>
+<li>Lastly, <code>c("NULL", "", " ")</code> tells R to replace any NULL values, blank values, or data points that are just spaces with NA.</li>
+</ol>
+<div class="question">
+<p><strong>Missing values</strong></p>
+<p>NULL values, empty cells, and random spaces routinely show up in data sets, either as artifacts of user error or errors introduced during data collection. All these will cause issues when it comes time to process our data. We can account for and then deal with these appropriately by replacing these with NA.</p>
+<p><strong>NULL values</strong></p>
+<p>NULL values and NA values are different in that NULL represents the absence of information while NA indicates missing information. NA has substance, NULL does not, and if we don’t have a data point that was collected, we want this read as a missing data point not as nothing!</p>
+</div>
+<p>At this stage, everything looks good, and we should be set to import our dataset, so we’ll do exactly as above, but we’ll pull in the full data set and store it in a variable called <code>SwissData</code>:</p>
+<pre>SwissData <- (read.table("SwissData.csv", sep = ",", row.names = 1, header = TRUE, na.strings = c("NULL", "", " ")))</pre>
+<pre class="r"><code>head(SwissData)</code></pre>
+<pre><code>##              Fertility Agriculture Examination Education Catholic Infant.Mortality
+## Courtelary        80.2        17.0          15        12       NA             22.2
+## Delemont          83.1        45.1           6         9    84.84             22.2
+## Franches-Mnt      92.5        39.7           5         5    93.40             20.2
+## Moutier           85.8        36.5          12         7    33.77             20.3
+## Neuveville        76.9        43.5          17        15     5.16             20.6
+## Porrentruy        76.1        35.3           9         7    90.57             26.6</code></pre>
+<p>The one last thing we’ll do is inquire about our structure</p>
+<pre class="r"><code>str(SwissData)</code></pre>
+<pre><code>## &#39;data.frame&#39;:    47 obs. of  6 variables:
+##  $ Fertility       : num  80.2 83.1 92.5 85.8 76.9 76.1 83.8 92.4 82.4 82.9 ...
+##  $ Agriculture     : num  17 45.1 39.7 36.5 43.5 35.3 70.2 67.8 53.3 45.2 ...
+##  $ Examination     : int  15 6 5 12 17 9 16 14 12 16 ...
+##  $ Education       : int  12 9 5 7 15 7 7 8 7 13 ...
+##  $ Catholic        : num  NA 84.84 93.4 33.77 5.16 ...
+##  $ Infant.Mortality: num  22.2 22.2 20.2 20.3 20.6 26.6 23.6 24.9 21 24.4 ...</code></pre>
+<p>And at this point, we should be able to start working with this data set using all of the tools that we’ve encountered so far.</p>
+</div>
+</div>
+<div id="next-steps" class="section level2">
+<h2>Next steps</h2>
+<p>Up until now, we’ve been working through exploring, altering, and asking questions of our data with tools that are built into base R, that is with tools that come with a basic installation.</p>
+<p>In the introduction, we talked about R being more than a programming language, and being a <strong>community of developers and users</strong>.</p>
+<p>This community is continually creating new custom tools, that is new functions, to help you do more and to do this more efficiently. These functions come bundled as packages that you can install. You’ll frequently see reference to these packages.</p>
+<p>To see what packages you have installed on you system, you can run <code>installed.packages()</code></p>
+<pre class="r"><code>installed.packages()</code></pre>
+<p>To know what functions are available in a give package you can run <code>help(package="packageName")</code></p>
+<p>To install a package that you don’t have, you would run <code>install.packages("PackageName")</code></p>
+<div id="tidyverse" class="section level3">
+<h3>Tidyverse</h3>
+<p>Tidyverse is a collection of R packages that is well worth exploring.</p>
+<div id="dplyr" class="section level4">
+<h4>dplyr</h4>
+<p>One of these packages, called <code>dplyr</code>, allows you to do a lot of what we did today in a more streamlined way.</p>
+<p>To install <code>dplyr</code> you can run</p>
+<pre><code>install.packages("dplyr")</code></pre>
+<p>And then to see the functions available, you can run</p>
+<pre class="r"><code>help(package = &quot;dplyr&quot;)</code></pre>
+<p>To learn more about tidyverse and <code>dplyr</code> you can visit <a href="https://dplyr.tidyverse.org/">https://dplyr.tidyverse.org/</a></p>
+</div>
+<div id="readxl" class="section level4">
+<h4>readxl</h4>
+<p>Another of these is <code>readxl</code>, which has several functions to allow you to import Excel files. It works very much like <code>read.table</code> but for Excel files.</p>
+<p>To install <code>readxl</code> you can run</p>
+<pre><code>install.packages("readxl")</code></pre>
+<p>And then to see the functions available, you can run</p>
+<pre class="r"><code>help(package = &quot;readxl&quot;)</code></pre>
+<p>To learn more about tidyverse and <code>readxl</code> you can visit <a href="https://readxl.tidyverse.org/">https://readxl.tidyverse.org/</a></p>
+</div>
+</div>
+</div>
+
+<div id="footer">
+    <hr />
+    <p>Built and rendered curtousy of <a href="https://rmarkdown.rstudio.com/index.html" target ="blank">RMarkdown from RStudio</a></p>
+</div>
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = false;
+    options.smoothScroll = false;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>Math and Random Samples</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/flatly.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+<link rel="stylesheet" href="styles.css" type="text/css" />
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 60px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h2 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h3 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h4 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h5 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h6 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #ffffff;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+.tocify-subheader {
+  display: inline;
+}
+.tocify-subheader .tocify-item {
+  font-size: 0.95em;
+}
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">R Fundamentals</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="Part_1.html">Part 1: Installation</a>
+</li>
+<li>
+  <a href="Part_2.html">Part 2: Introduction</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Part 3: Data Types
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="Part_3.1.html">3.1 Numbers and Logical Values</a>
+    </li>
+    <li>
+      <a href="Part_3.2.html">3.2 Characters and Categories</a>
+    </li>
+    <li>
+      <a href="Part_3.3.html">3.3 Math and Random Samples</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Part 4: Matrices and Dataframes
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="Part_4.1.html">4.1 Matrix Data</a>
+    </li>
+    <li>
+      <a href="Part_4.2.html">4.2 Dataframes</a>
+    </li>
+    <li>
+      <a href="Part_4.3.html">4.3 Importing Data</a>
+    </li>
+  </ul>
+</li>
+<li>
+  <a href="Part_5_Exercises.html">Exercises</a>
+</li>
+<li>
+  <a href="Resources.html">Resources</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">Math and Random Samples</h1>
+
+</div>
+
+
+<div id="scripting" class="section level2">
+<h2>Scripting</h2>
+<p>Before we get into working with a real data set, we’re going to explore how we can create random sample data, how we can run calculations on our data, and how we can replace values in our data.</p>
+<p>In additional to mathematical operators, we will learn about the following functions:</p>
+<ul>
+<li><code>sample()</code></li>
+<li><code>replace()</code></li>
+</ul>
+<p>In doing so, we’re also going to walk out of the console and move into a scripting environment.</p>
+<div class="question">
+<p><strong>Scripting</strong></p>
+<p>By writing our code in a script, we can save our code and don’t need to retype it every time we want to run it.</p>
+<p>Scripting is really the first step to creating a reproducible environment for your work that also saves you time in the long run.</p>
+</div>
+<p>So, head to your file menu, select <em>&gt; New File</em> and <em>&gt; R Script</em>.</p>
+<p><span class="important"><strong>This next bit is important</strong></span></p>
+<p>First things first, we’ll <strong>save it on our desktop in a folder called <code>RScripts</code></strong>. This will be important later in this workshop.</p>
+</div>
+<div id="simple-math" class="section level2">
+<h2>Simple math</h2>
+<p>R allows us to perform math on our data.</p>
+<ul>
+<li>+</li>
+<li>-</li>
+<li>*</li>
+<li>/</li>
+</ul>
+<p>This can be as simple as typing in</p>
+<pre class="r"><code>2+2</code></pre>
+<pre><code>## [1] 4</code></pre>
+<pre class="r"><code>2*3</code></pre>
+<pre><code>## [1] 6</code></pre>
+<pre class="r"><code>3-2</code></pre>
+<pre><code>## [1] 1</code></pre>
+<pre class="r"><code>4/2</code></pre>
+<pre><code>## [1] 2</code></pre>
+<p>But that’s not overly exciting. We can get a little fancier:</p>
+<pre class="r"><code>3^3</code></pre>
+<pre><code>## [1] 27</code></pre>
+<pre class="r"><code>sqrt(81)</code></pre>
+<pre><code>## [1] 9</code></pre>
+<pre class="r"><code>log(1200)</code></pre>
+<pre><code>## [1] 7.090077</code></pre>
+<p>Still not terribly exciting, as this is basically just a glorified calculator. But let’s look at this in more depth.</p>
+</div>
+<div id="math-on-vectors" class="section level2">
+<h2>Math on Vectors</h2>
+<p><strong>First</strong> We know how to create a vector and assign that vector to a variable. So let’s get some data prepped and try the following:</p>
+<ol style="list-style-type: decimal">
+<li>Create 2 vectors of equal length</li>
+<li>Add them together with the results contained in a new variable.</li>
+<li>Ask R what data type you have</li>
+</ol>
+<pre class="r"><code>a &lt;- c(1:5)
+a</code></pre>
+<pre><code>## [1] 1 2 3 4 5</code></pre>
+<pre class="r"><code>b &lt;- c(6:10)
+b</code></pre>
+<pre><code>## [1]  6  7  8  9 10</code></pre>
+<pre class="r"><code>c &lt;- a + b
+c</code></pre>
+<pre><code>## [1]  7  9 11 13 15</code></pre>
+<pre class="r"><code>typeof(c)</code></pre>
+<pre><code>## [1] &quot;integer&quot;</code></pre>
+<p><strong>Second</strong> Let’s do another calculation on <code>c</code>, this time multiplication:</p>
+<pre class="r"><code>d &lt;- c * 5
+
+d</code></pre>
+<pre><code>## [1] 35 45 55 65 75</code></pre>
+<div class="note">
+<p><strong>Note</strong></p>
+<p>Each time we’re storing our new, computed data in a new variable.</p>
+<p>If we’re going to running a computation on our data, for the purposes error tracking and transparency, it is advisable to generate a new variable.</p>
+</div>
+<p>This highlights an interesting feature of R. R is all about vectors and operations are performed across vectors. When we do something to our vector, R iteratively goes through each value in the vector and applies that change. In the first case, it added each corresponding value together across each vector. In the second case, it multiplied all of our values by 5.</p>
+<div id="sample" class="section level3">
+<h3>Sample()</h3>
+<p><strong>Third</strong> Let’s do the same thing as in step 1 again, but this time with a random sample of numbers using the <code>sample()</code> function. We encountered <code>sample()</code> earlier. Now we’ll get a bit more familiar with how it works.</p>
+<p>The function <code>sample()</code> takes four arguments</p>
+<ul>
+<li>a range to sample from</li>
+<li>the sample size</li>
+<li>a declaration of whether or not repeat selections are allowed</li>
+<li>a weighted probability</li>
+</ul>
+<p>We apply the arguments in this pattern <code>sample(dataSource, sampleSize, repeatsAllowed, Probabilities)</code></p>
+<p>For this example, we’ll ignore weighted probability.</p>
+<ol style="list-style-type: decimal">
+<li>Let’s take two random samples of 10 units each between 1 and 100. Sample <code>a</code> will be allowed to have duplicates, sample <code>b</code> will not</li>
+<li>Multiply the samples together.</li>
+<li>Ask R what data type you have</li>
+<li>Calculate the standard deviation of <em>3</em></li>
+</ol>
+<pre class="r"><code>a &lt;- sample(1:100, 10, replace=TRUE)
+a</code></pre>
+<pre><code>##  [1] 29 87 81 82  4 74  8 90 51 22</code></pre>
+<pre class="r"><code>b &lt;- sample(1:100, 10, replace=FALSE)
+b</code></pre>
+<pre><code>##  [1] 11 33 89 17 48 64 78 18 42 62</code></pre>
+<p>Now we’ll multiply across the vector:</p>
+<pre class="r"><code>c &lt;- a * b
+c</code></pre>
+<pre><code>##  [1]  319 2871 7209 1394  192 4736  624 1620 2142 1364</code></pre>
+<p>Ask about the type of data we have</p>
+<pre class="r"><code>typeof(c)</code></pre>
+<pre><code>## [1] &quot;integer&quot;</code></pre>
+<p>And finally calculate the standard deviation of the result</p>
+<pre class="r"><code>sd(c)</code></pre>
+<pre><code>## [1] 2203.324</code></pre>
+<p>Before we move on, we should look at one more thing here. We should inquire about the data type of our standard deviation</p>
+<pre class="r"><code>typeof(sd(c))</code></pre>
+<pre><code>## [1] &quot;double&quot;</code></pre>
+<p>And we should note that while our variable <code>c</code> reports that it has integer data, R has converted our integer on the fly to double.</p>
+</div>
+<div id="what-have-we-learned" class="section level3">
+<h3>What have we learned</h3>
+<ul>
+<li>R can be used as a glorified calculator</li>
+<li>Mathematical functions are performed across a vector in R</li>
+<li>We can create our own test data with <code>sample()</code></li>
+</ul>
+</div>
+</div>
+<div id="conditions-and-testing" class="section level2">
+<h2>Conditions and Testing</h2>
+<p>Now we’re going to look at how we can isolate or inquire about only a portion of our vector.</p>
+<p>To do this, we’re gong to build a vector of 20 random numbers between 20 and 35, and let’s pretend these are temperatures representing daily highs over a given period of time.</p>
+<pre class="r"><code>Temperature &lt;- sample(20:35, 20, replace = TRUE)
+
+Temperature</code></pre>
+<pre><code>##  [1] 31 23 21 23 31 22 22 26 34 28 21 29 33 25 25 24 34 35 35 31</code></pre>
+<p>To get a bit more familiar with our sample, we’ll test for values above a certain threshold, let’s say above 27.</p>
+<p>Our first inclination might be to type the variable with a greater than sign in the hopes that R will tell you what values are greater than 27 in the variable.</p>
+<p>Let’s give that a try:</p>
+<pre class="r"><code>Temperature &gt; 27</code></pre>
+<pre><code>##  [1]  TRUE FALSE FALSE FALSE  TRUE FALSE FALSE FALSE  TRUE  TRUE FALSE  TRUE  TRUE FALSE FALSE FALSE  TRUE  TRUE
+## [19]  TRUE  TRUE</code></pre>
+<p>So, this is interesting, and not exactly what we wanted.</p>
+<p>This first statement is not showing us the <strong>values</strong>, but is apparently testing the <strong>condition</strong> and telling us if the condition - <code>Temperature</code> is greater than 27 - is <code>TRUE</code> or <code>FALSE</code>.</p>
+<p>Let’s try this again a little differently:</p>
+<pre class="r"><code>Temperature[Temperature &gt; 27]</code></pre>
+<pre><code>##  [1] 31 31 34 28 29 33 34 35 35 31</code></pre>
+<p>That’s better. This time, we successfully asked the system to print out the values of our vector <code>Temperature</code> where <code>Temperature</code> is greater the 27.</p>
+<div id="indexing" class="section level4">
+<h4>Indexing</h4>
+<p>So what’s happening here? Welcome to indexing. R maintains an index of your data in a variable. We ask about the index using square brackets [].</p>
+<p>If we were to type</p>
+<pre class="r"><code>Temperature[1]</code></pre>
+<pre><code>## [1] 31</code></pre>
+<p>R would return the first value in our vector. We can ask about any range within our vector. For example, the first three values:</p>
+<pre class="r"><code>Temperature[1:3]</code></pre>
+<pre><code>## [1] 31 23 21</code></pre>
+<p>Or, like above, we can ask for a range based off of a condition, such as, all values where the variable <code>Temperature</code> is greater than 27.</p>
+<pre class="r"><code>Temperature[Temperature &gt; 27] </code></pre>
+<pre><code>##  [1] 31 31 34 28 29 33 34 35 35 31</code></pre>
+<p>In short:</p>
+<pre class="r"><code>Temperature &gt; 27 # is testing a condition that returns a logical value of TRUE or FALSE</code></pre>
+<pre><code>##  [1]  TRUE FALSE FALSE FALSE  TRUE FALSE FALSE FALSE  TRUE  TRUE FALSE  TRUE  TRUE FALSE FALSE FALSE  TRUE  TRUE
+## [19]  TRUE  TRUE</code></pre>
+<pre class="r"><code>Temperature[Temperature &gt; 27] ## is inquiring about the indexed values that satisfy the condition</code></pre>
+<pre><code>##  [1] 31 31 34 28 29 33 34 35 35 31</code></pre>
+</div>
+</div>
+<div id="exercise-3.3" class="section level2">
+<h2>Exercise 3.3</h2>
+<ol style="list-style-type: decimal">
+<li>How many of the values in <code>Temperature</code> are higher than 27 <em>hint</em> use <code>length()</code>:</li>
+<li>Get a summary, similar to this, of the data in <code>Temperature</code>.</li>
+</ol>
+<pre><code>##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+##   21.00   23.00   27.00   27.65   31.50   35.00</code></pre>
+<div class="note">
+<p><strong>Note</strong></p>
+<p>Your values will be different because our sampes are different, but the descriptive categories should be the same.</p>
+</div>
+<div id="what-have-we-learned-1" class="section level3">
+<h3>What have we learned</h3>
+<ul>
+<li>We can test a vector for a condition and get a report of <code>TRUE</code> or <code>FALSE</code></li>
+<li>We can retrieve the values from only a portion of the data in a vector. This subset of our data can be defined by:
+<ul>
+<li>an index point or range; or</li>
+<li>a condition</li>
+</ul></li>
+</ul>
+</div>
+</div>
+<div id="replace" class="section level2">
+<h2>Replace()</h2>
+<p>Now that we know how to isolate values in our variables, we can introduce the function <code>replace()</code>.</p>
+<p>First, we’ll simply replace the first 3 temperatures with 0. <code>replace()</code> requires three arguments:</p>
+<ul>
+<li>a vector</li>
+<li>a list of index values to be replaced (or as a condition of the vector)</li>
+<li>a new value for replacement (this can be a computed value)</li>
+</ul>
+<p>We apply the arguments in this pattern <code>replace(vector, list, value)</code></p>
+<pre class="r"><code>replacingValues &lt;- replace(Temperature, c(1,2,3), 0)
+
+replacingValues</code></pre>
+<pre><code>##  [1]  0  0  0 23 31 22 22 26 34 28 21 29 33 25 25 24 34 35 35 31</code></pre>
+<p>Not very exciting. But notice an important thing here. We didn’t replace the values 1, 2, and 3 with zero, but the index points 1, 2, and 3, or, in other words, the first three data points. So, if we know where a value is in our vector, we can change it.</p>
+<p>What is one way that we can know where a value is located in our vector? We can conditionally test for it.</p>
+<p>And we’ll do this by replacing all temperatures that are greater than 27 with 0. It’s important to note here that we need to test for a condition, not just provide a list of values. If you recall, we can test if a value is above 27 with the following</p>
+<pre class="r"><code>Temperature &gt; 27</code></pre>
+<pre><code>##  [1]  TRUE FALSE FALSE FALSE  TRUE FALSE FALSE FALSE  TRUE  TRUE FALSE  TRUE  TRUE FALSE FALSE FALSE  TRUE  TRUE
+## [19]  TRUE  TRUE</code></pre>
+<p>While we can get a list of values with</p>
+<pre class="r"><code>Temperature[Temperature &gt; 27]</code></pre>
+<pre><code>##  [1] 31 31 34 28 29 33 34 35 35 31</code></pre>
+<p>Let’s try this out.</p>
+<pre class="r"><code>TemperatureZeros &lt;- replace(Temperature, Temperature &gt; 27, 0) # in the variable Temperature, where the condition is TRUE, replace with 0
+
+TemperatureZeros</code></pre>
+<pre><code>##  [1]  0 23 21 23  0 22 22 26  0  0 21  0  0 25 25 24  0  0  0  0</code></pre>
+</div>
+<div id="exercise-3.4" class="section level2">
+<h2>Exercise 3.4</h2>
+<p>See if you can now add a bit of math into this scenario. Exactly as above, replace the temperatures in <code>Temperature</code> that are above 27, but this time, replace them with values that are double their own, so if you have 30, it becomes 60, 32 becomes 64 and so on.</p>
+<div id="what-have-we-learned-2" class="section level3">
+<h3>What have we learned</h3>
+<ul>
+<li>We can replace values in our data based either off of:
+<ul>
+<li>A known index point</li>
+<li>A condition being met that allows an index point to be targeted</li>
+</ul></li>
+<li>We can perform multiple tasks in tandem, for example, replacing a value with a computed derivative of its original value.</li>
+</ul>
+</div>
+</div>
+
+<div id="footer">
+    <hr />
+    <p>Built and rendered curtousy of <a href="https://rmarkdown.rstudio.com/index.html" target ="blank">RMarkdown from RStudio</a></p>
+</div>
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = false;
+    options.smoothScroll = false;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

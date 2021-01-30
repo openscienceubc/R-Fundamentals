@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>Character and Categorical Data</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/flatly.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+<link rel="stylesheet" href="styles.css" type="text/css" />
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 60px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h2 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h3 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h4 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h5 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h6 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #ffffff;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+.tocify-subheader {
+  display: inline;
+}
+.tocify-subheader .tocify-item {
+  font-size: 0.95em;
+}
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">R Fundamentals</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="Part_1.html">Part 1: Installation</a>
+</li>
+<li>
+  <a href="Part_2.html">Part 2: Introduction</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Part 3: Data Types
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="Part_3.1.html">3.1 Numbers and Logical Values</a>
+    </li>
+    <li>
+      <a href="Part_3.2.html">3.2 Characters and Categories</a>
+    </li>
+    <li>
+      <a href="Part_3.3.html">3.3 Math and Random Samples</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Part 4: Matrices and Dataframes
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="Part_4.1.html">4.1 Matrix Data</a>
+    </li>
+    <li>
+      <a href="Part_4.2.html">4.2 Dataframes</a>
+    </li>
+    <li>
+      <a href="Part_4.3.html">4.3 Importing Data</a>
+    </li>
+  </ul>
+</li>
+<li>
+  <a href="Part_5_Exercises.html">Exercises</a>
+</li>
+<li>
+  <a href="Resources.html">Resources</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">Character and Categorical Data</h1>
+
+</div>
+
+
+<div id="introduction" class="section level2">
+<h2>Introduction</h2>
+<p>When we collect data, we also frequently collect strings of text. For example, we might collect data in a free text field where we ask participants, "what’s your favourite food?"</p>
+<p>Let’s build a potential selection of choices into a variable called <code>myFavouriteFood</code>:</p>
+<pre class="r"><code>myFavouriteFood &lt;- c(&quot;Costco hotdogs&quot;, &quot;Pizza&quot;, &quot;Pork and onion dumplings&quot;, &quot;Anything deep fried&quot;, &quot;Potato chips&quot;)
+
+myFavouriteFood</code></pre>
+<pre><code>## [1] &quot;Costco hotdogs&quot;           &quot;Pizza&quot;                    &quot;Pork and onion dumplings&quot; &quot;Anything deep fried&quot;     
+## [5] &quot;Potato chips&quot;</code></pre>
+<div class="note">
+<p><strong>Note</strong></p>
+<p>Our text is contained in "". Characters, or strings of text, always need to be encompassed in "", which tells R, we’re dealing with natural language here, not units that we can compute, such as numbers, or a conditional test, like logical values.</p>
+</div>
+<p>We can ask R about both our <code>class()</code> and data type <code>typeof()</code></p>
+<pre class="r"><code>class(myFavouriteFood)</code></pre>
+<pre><code>## [1] &quot;character&quot;</code></pre>
+<pre class="r"><code>typeof(myFavouriteFood)</code></pre>
+<pre><code>## [1] &quot;character&quot;</code></pre>
+<p>We could hold larger chunks of text in a variable if we wanted, and in fact, we can use R for text analysis starting with a single work of text as a data import which we then break apart for analysis. But that’s for another workshop or some of the additional resources listed under the resources tab.</p>
+</div>
+<div id="categorical-data" class="section level2">
+<h2>Categorical Data</h2>
+<p>Often our character data is in fact categorical data. Categorical data, while represented by strings of characters, is not the same as plain old text. So, it would be nice to have a way to work with plain text categorical data as categorical data.</p>
+<p>If we were recording for 'yes' and 'no', we might convert, or code, these to numerical data where 'yes' is 1 and 'no' is 0. But the numerical data on its own tells us nothing about the categories they represent. For this, we would use labels and somewhere - say in a data dictionary that accompanied our dataset - we would record that yes = 1 and no = 0.</p>
+<div class="question">
+<p><strong>Why might it be useful to store categorical data as integers?</strong></p>
+<p>One reason would be to think about the amount of information we’re working with. <em>Yes</em> is comprised of three pieces of information, one for each letter of the alphabet. <em>No</em>, two pieces.</p>
+<p>On their own, this seems trivial. But now imagine you have 10 000 survey results, 50 percent of which are yes answers, and 50 percent no. This would represent 25 000 pieces of information - when we add up all the letters - that we would need to store and process. If we were only using 0s and 1s, this would be only 10 000 pieces of information to store and process, less than half the amount of data.</p>
+<p>When we think about using R well, we want to be thinking in part of how to avoid inefficiencies in our coding. storing categorical data as integers is one way to do this.</p>
+</div>
+<p><strong>Back to R and categories</strong></p>
+<p>R provides us with a semantic class, <strong>factors</strong>, to address this; factors are - just as we suggested above as a solution to our yes no problem - integers with labels.</p>
+<p>Let’s work through this with an example. Say we collected information on eye colour. We can capture possible values in the following vector:</p>
+<pre class="r"><code>eyeColour &lt;- c(&quot;blue&quot;, &quot;green&quot;, &quot;brown&quot;, &quot;hazel&quot;, &quot;amber&quot;, &quot;grey&quot;)
+
+eyeColour</code></pre>
+<pre><code>## [1] &quot;blue&quot;  &quot;green&quot; &quot;brown&quot; &quot;hazel&quot; &quot;amber&quot; &quot;grey&quot;</code></pre>
+<p>Now let’s treat this more like true data capture, and create a random sample of eye colour from 50 participants - we’ll look more at <code>sample()</code> shortly, for now just copy the code.</p>
+<pre class="r"><code>eyeColourSample &lt;- sample(eyeColour, 50, replace = TRUE)
+
+eyeColourSample</code></pre>
+<pre><code>##  [1] &quot;blue&quot;  &quot;hazel&quot; &quot;green&quot; &quot;brown&quot; &quot;green&quot; &quot;green&quot; &quot;blue&quot;  &quot;amber&quot; &quot;amber&quot; &quot;brown&quot; &quot;hazel&quot; &quot;brown&quot; &quot;blue&quot; 
+## [14] &quot;amber&quot; &quot;amber&quot; &quot;hazel&quot; &quot;brown&quot; &quot;grey&quot;  &quot;blue&quot;  &quot;green&quot; &quot;brown&quot; &quot;grey&quot;  &quot;brown&quot; &quot;green&quot; &quot;grey&quot;  &quot;blue&quot; 
+## [27] &quot;grey&quot;  &quot;brown&quot; &quot;brown&quot; &quot;hazel&quot; &quot;hazel&quot; &quot;hazel&quot; &quot;blue&quot;  &quot;blue&quot;  &quot;hazel&quot; &quot;blue&quot;  &quot;grey&quot;  &quot;amber&quot; &quot;brown&quot;
+## [40] &quot;green&quot; &quot;hazel&quot; &quot;hazel&quot; &quot;brown&quot; &quot;hazel&quot; &quot;brown&quot; &quot;hazel&quot; &quot;green&quot; &quot;brown&quot; &quot;brown&quot; &quot;hazel&quot;</code></pre>
+<p>Let’s first ask R what our <code>class()</code> and <code>typeof()</code> are</p>
+<pre class="r"><code>class(eyeColourSample)</code></pre>
+<pre><code>## [1] &quot;character&quot;</code></pre>
+<pre class="r"><code>typeof(eyeColourSample)</code></pre>
+<pre><code>## [1] &quot;character&quot;</code></pre>
+<p>You’ll note that both return 'Character'. But we know that this is categorical data represented by characters, so ideally, <code>class()</code> would tell us that we have categorical data, while <code>typeof()</code> would tell us that this is represented by integers, while actually calling the variable would allow us to see the labels - the characters - assigned to these integers.</p>
+<p>So, we have character data that we want held as factor, or categorical, data - that is, we want our strings converted to integers where each integer has its original string as its label.</p>
+</div>
+<div id="converting-between-classes" class="section level2">
+<h2>Converting Between Classes</h2>
+<p>R allows us to convert data between classes. In the above example, we know that <code>eyeColour</code> is in fact categorical data. R stores categorical data as class <code>factor</code>. We can convert our plain text character data to categorical data with the <code>as.factor()</code> function:</p>
+<pre class="r"><code>eyeColourSample &lt;- as.factor(eyeColourSample)
+
+eyeColourSample</code></pre>
+<pre><code>##  [1] blue  hazel green brown green green blue  amber amber brown hazel brown blue  amber amber hazel brown grey 
+## [19] blue  green brown grey  brown green grey  blue  grey  brown brown hazel hazel hazel blue  blue  hazel blue 
+## [37] grey  amber brown green hazel hazel brown hazel brown hazel green brown brown hazel
+## Levels: amber blue brown green grey hazel</code></pre>
+<p>We have now overwritten our variable <code>eyeColourSample</code> and when we call it, R now reports on levels, that is, categories, and it has dropped our "". Also, note that we’re no longer looking strictly at our underlying data and its raw structure, we’re looking instead at the labels associated with our data.</p>
+<p>If we ask about <code>class()</code> and <code>typeof()</code> we also now see that this is a factor, comprised of integers, which when called, is displayed with text.</p>
+<pre class="r"><code>class(eyeColourSample)</code></pre>
+<pre><code>## [1] &quot;factor&quot;</code></pre>
+<pre class="r"><code>typeof(eyeColourSample)</code></pre>
+<pre><code>## [1] &quot;integer&quot;</code></pre>
+<pre class="r"><code>eyeColourSample</code></pre>
+<pre><code>##  [1] blue  hazel green brown green green blue  amber amber brown hazel brown blue  amber amber hazel brown grey 
+## [19] blue  green brown grey  brown green grey  blue  grey  brown brown hazel hazel hazel blue  blue  hazel blue 
+## [37] grey  amber brown green hazel hazel brown hazel brown hazel green brown brown hazel
+## Levels: amber blue brown green grey hazel</code></pre>
+<p>We can ask R to tell us only the labels used, as well as the number of labels or categories represented using the functions <code>levels()</code> and <code>nlevels()</code></p>
+<pre class="r"><code>levels(eyeColourSample)</code></pre>
+<pre><code>## [1] &quot;amber&quot; &quot;blue&quot;  &quot;brown&quot; &quot;green&quot; &quot;grey&quot;  &quot;hazel&quot;</code></pre>
+<pre class="r"><code>nlevels(eyeColourSample)</code></pre>
+<pre><code>## [1] 6</code></pre>
+</div>
+<div id="asking-questions" class="section level2">
+<h2>Asking Questions</h2>
+<p>We’ve encountered a number of functions to this point that allow us to ask questions of our data and the objects holding our data. One other useful function is <code>summary()</code>, which provides an overview of our data. What <code>summary()</code> returns will depend on what you’re calling the function on.</p>
+<pre class="r"><code>summary(eyeColourSample)</code></pre>
+<pre><code>## amber  blue brown green  grey hazel 
+##     5     8    13     7     5    12</code></pre>
+<p>R allows us to convert between many data structures using <code>as.</code>:</p>
+<ul>
+<li><code>as.numeric</code></li>
+<li><code>as.vector</code></li>
+<li><code>as.character</code></li>
+</ul>
+<p>etc…</p>
+</div>
+<div id="exercise-3.2" class="section level2">
+<h2>Exercise 3.2</h2>
+<ol style="list-style-type: decimal">
+<li>Find all the <code>as.</code> functions available in R</li>
+</ol>
+</div>
+<div id="what-have-we-learned" class="section level2">
+<h2>What Have we Learned</h2>
+<ul>
+<li>R can work with plain text, which needs to be wrapped in ""</li>
+<li>R can hold categorical data numerically while representing it with labels making it semantically significant.</li>
+<li>R can convert between classes of data</li>
+</ul>
+</div>
+
+<div id="footer">
+    <hr />
+    <p>Built and rendered curtousy of <a href="https://rmarkdown.rstudio.com/index.html" target ="blank">RMarkdown from RStudio</a></p>
+</div>
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = false;
+    options.smoothScroll = false;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

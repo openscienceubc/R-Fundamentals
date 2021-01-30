@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>Numeric and Logical Data</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/flatly.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+<link rel="stylesheet" href="styles.css" type="text/css" />
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 60px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h2 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h3 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h4 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h5 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h6 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #ffffff;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+.tocify-subheader {
+  display: inline;
+}
+.tocify-subheader .tocify-item {
+  font-size: 0.95em;
+}
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">R Fundamentals</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="Part_1.html">Part 1: Installation</a>
+</li>
+<li>
+  <a href="Part_2.html">Part 2: Introduction</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Part 3: Data Types
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="Part_3.1.html">3.1 Numbers and Logical Values</a>
+    </li>
+    <li>
+      <a href="Part_3.2.html">3.2 Characters and Categories</a>
+    </li>
+    <li>
+      <a href="Part_3.3.html">3.3 Math and Random Samples</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Part 4: Matrices and Dataframes
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="Part_4.1.html">4.1 Matrix Data</a>
+    </li>
+    <li>
+      <a href="Part_4.2.html">4.2 Dataframes</a>
+    </li>
+    <li>
+      <a href="Part_4.3.html">4.3 Importing Data</a>
+    </li>
+  </ul>
+</li>
+<li>
+  <a href="Part_5_Exercises.html">Exercises</a>
+</li>
+<li>
+  <a href="Resources.html">Resources</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">Numeric and Logical Data</h1>
+
+</div>
+
+
+<div id="data-types" class="section level2">
+<h2>Data Types</h2>
+<p>R has 5 basic data types: numeric, complex, logical, character, and raw. Right now, we’re going to explore numeric and logical data.</p>
+</div>
+<div id="numeric-and-logical-data" class="section level2">
+<h2>Numeric and Logical Data</h2>
+<p>When using R, we are likely going to be analysing data. Understanding how R organizes, classifies, and structures your data is consequently critical to doing this well and avoiding headaches.</p>
+<div id="numeric-data" class="section level3">
+<h3>Numeric data</h3>
+<p>Numeric data in R can be further broken down into two types, integer and double</p>
+<ul>
+<li>double (Double precision floating point, ie can have a decimal)</li>
+<li>integer (Whole number, full stop)</li>
+</ul>
+<p><strong>double</strong> are numbers that can (but don’t necessarily) have decimals. That is, they can be real, whole numbers, or decimal.</p>
+<div class="question">
+<p><strong>Naming variables</strong></p>
+<p>As we go through this workshop, we’ll working through exploring the concepts we’re looking at through variable assignment and then asking questions about our variables. When naming variables, keep in mind the following:</p>
+<ul>
+<li>Variable names should first and foremost be meaningful.</li>
+<li>They <strong>cannot</strong> start with a number or a dot followed by a number.</li>
+<li>They <strong>cannot</strong> contain spaces</li>
+<li>They <strong>can</strong> contain letters, numbers, dots, and underscores.</li>
+<li>Some words are <em>reserved</em> and cannot be used, such as <em>if</em> and <em>for</em>.</li>
+</ul>
+<p>More details can be found with <code>?make.names</code></p>
+</div>
+<p>Let’s assign a decimal and whole number to two respective variables:</p>
+<pre class="r"><code>decimalPoint &lt;- 10.1
+
+decimalPoint</code></pre>
+<pre><code>## [1] 10.1</code></pre>
+<pre class="r"><code>noDecimalPoint &lt;- 10
+
+noDecimalPoint</code></pre>
+<pre><code>## [1] 10</code></pre>
+<p>We can then inquire about these data with <code>type(of)</code>:</p>
+<pre class="r"><code>typeof(decimalPoint)</code></pre>
+<pre><code>## [1] &quot;double&quot;</code></pre>
+<pre class="r"><code>typeof(noDecimalPoint)</code></pre>
+<pre><code>## [1] &quot;double&quot;</code></pre>
+<p>And we see that they are both returned as “double”.</p>
+<p><strong>integers</strong> are our real, whole numbers. As above, let’s assign an integer to a variable. To do this, we append the digits with an <code>L</code>:</p>
+<pre class="r"><code>wholeNumber &lt;- 10L
+
+wholeNumber</code></pre>
+<pre><code>## [1] 10</code></pre>
+<p>Now, if we ask about the data type, we are returned “integer”:</p>
+<pre class="r"><code>typeof(wholeNumber)</code></pre>
+<pre><code>## [1] &quot;integer&quot;</code></pre>
+<div class="note">
+<p><strong>Note</strong></p>
+<p>Without the <code>L</code>, R will create <code>wholeNumber</code> as a <code>double</code>, as we saw in <code>noDecimalPoint</code></p>
+<p>R will convert on the fly between integers and doubles - so, if we’re performing a calculation that should only result in a whole number, we need to be keenly aware of this and account for it! We’ll look at ways to ensure this in a bit.</p>
+</div>
+</div>
+<div id="logical-values" class="section level3">
+<h3>Logical Values</h3>
+<p>We can also create logical data, that is, data that is either True or False. We could, for example, record the flipping of a coin as either heads or tails, or we could measure it as the number of times we get heads, by declaring a value of heads to be true and a value of tails to be false.</p>
+<p>We’ll assign two logical statements to a vector and assign it to a variable:</p>
+<pre class="r"><code>myLogicalVector &lt;- c(TRUE,FALSE)
+
+myLogicalVector</code></pre>
+<pre><code>## [1]  TRUE FALSE</code></pre>
+<p>And then we can ask about it - as we’ll see in a bit, it’s always a good idea to investigate your data and to ask questions about it to ensure that the program that you’re working with is behaving as you expect it to!</p>
+<pre class="r"><code>typeof(myLogicalVector)</code></pre>
+<pre><code>## [1] &quot;logical&quot;</code></pre>
+</div>
+</div>
+<div id="objects" class="section level2">
+<h2>Objects</h2>
+<p>As we have been seeing, we can ask R to provide us with information about our data with by using <code>typeof()</code>. However, we can inquire about a different aspect of our data using the function <code>class()</code>.</p>
+<p>In our earlier example, we created <code>myFirstVector</code>, a vector made up of 256 numbers. If you recall, we did this with the following code</p>
+<pre class="r"><code>myFirstVector &lt;- c(1:256)</code></pre>
+<div class="question">
+<p><strong>Question</strong></p>
+<p>Do we think this is a vector of integers or doubles? Why? What does an inquiry tell us?</p>
+</div>
+<p>It useful to think of the vector as an object made up of component parts; we have an object - a vector - and a series of component parts - numerical data. A typical visualization of myFirstVector would look like a single column of a table. In fact, we can see this with the <code>View()</code> function. Note the capital V.</p>
+<pre class="r"><code>View(myFirstVector)</code></pre>
+<p>At it’s simplest, <code>class()</code> will tell us about our object and <code>typeof()</code> will tell us about what our object holds.</p>
+<ul>
+<li>The function <code>class()</code> tells us information about our object</li>
+<li>The function <code>typeof()</code> tells us the actual data type that we’re dealing with. Classes can be changed data types cannot.</li>
+</ul>
+<div id="vectors" class="section level3">
+<h3>Vectors</h3>
+<p>Vectors in R are <code>atomic</code>. That is, they can only contain one data type, whether that be numeric, logical, character etc. So, a vector made up of:</p>
+<ul>
+<li>integer data will be an integer vector</li>
+<li>logical values will be a logical vector</li>
+<li>character values will be a character vector</li>
+</ul>
+<p>This means that when we call the function <code>class()</code> on our vector, we will likely get the same response from R as when we call the function <code>typeof()</code>. We will explore more complex methods of storing data shortly, which will have <code>class()</code> return an answer that makes more sense on the surface.</p>
+<p>For now, let’s explore <code>class()</code> and <code>typeof()</code> with the vectors and variables we’ve created.</p>
+</div>
+</div>
+<div id="exercise-3.1" class="section level2">
+<h2>Exercise 3.1</h2>
+<ul>
+<li>Create three variables that hold one numerical value each:
+<ul>
+<li>one integer</li>
+<li>one double, real, number</li>
+<li>one double, decimal, number</li>
+</ul></li>
+<li>Inquire as to the type of data and class of object that R tells you each of your variables are. Also ask R to tell you the length of your variables.
+<ul>
+<li>What do you notice?</li>
+<li>Do we get a valid response to the class function? If yes, why might this be? A variable with one data point is simply a vector of 1 unit.</li>
+</ul></li>
+</ul>
+</div>
+<div id="what-have-we-learned" class="section level2">
+<h2>What Have We Learned</h2>
+<ul>
+<li>R has 5 basic data types</li>
+<li>Data has both a class (the object holding the data) and type (the kind of data) that we can inquire about</li>
+<li>When we inquire about the class of an object, R sometimes reports on the data type that is making up that class</li>
+<li>numeric data can be either integer or double precision floating point (decimal ready), and R will convert between integer and floating point when needed</li>
+</ul>
+</div>
+
+<div id="footer">
+    <hr />
+    <p>Built and rendered curtousy of <a href="https://rmarkdown.rstudio.com/index.html" target ="blank">RMarkdown from RStudio</a></p>
+</div>
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = false;
+    options.smoothScroll = false;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
